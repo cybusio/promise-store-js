@@ -70,4 +70,4 @@ Returns the number of `Promises` currently pending.
 
 # Examples
 
-[https://github.com/cybusio/promise-store-js/tree/master/examples]()
+[https://github.com/cybusio/promise-store-js/tree/main/examples](https://github.com/cybusio/promise-store-js/tree/main/examples)
