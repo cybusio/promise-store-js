@@ -1,0 +1,29 @@
+{
+  "name": "promise-store-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/**/*.js --recursive --timeout 30000 --colors --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cybusio/promise-store-js.git"
+  },
+  "keywords": [
+    "promise",
+    "store",
+    "array"
+  ],
+  "author": "Jan Erichsen",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/cybusio/promise-store-js/issues"
+  },
+  "homepage": "https://github.com/cybusio/promise-store-js#readme",
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^10.1.0"
+  }
+}
