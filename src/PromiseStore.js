@@ -16,7 +16,7 @@ class PromiseStore {
 
         const timeout = setTimeout(() => {
             this._removePromise(promise)
-            reject(`request timeout`)
+            reject(new Error('request timeout'))
         }, this._timeout)
 
         this._store.push({ promise, resolve, reject, timeout, context })
@@ -24,14 +24,14 @@ class PromiseStore {
         return promise
     }
 
-    resolve(filter, data) {
+    resolve(filter, value) {
         if (typeof filter !== 'function') throw new Error(`filter is not a function`)
         if (!filter.toString().startsWith('function ')) throw new Error(`arrow function not supported as filter`)
         const _filter = filter.bind({})
         const promises = this._store.filter(_filter)
         promises.forEach((el) => {
             clearTimeout(el.timeout)
-            el.resolve(data)
+            el.resolve(value)
             this._removePromise(el.promise)
         })
     }

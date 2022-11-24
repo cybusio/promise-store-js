@@ -1,7 +1,7 @@
 {
   "name": "promise-store-js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Create and handle Promises in a simple manner",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha test/**/*.js --recursive --timeout 30000 --colors --exit"
