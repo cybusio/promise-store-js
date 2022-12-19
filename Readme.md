@@ -54,10 +54,17 @@ The `context` argument can be of `any` type and is ment to be used for filtering
 
 Resolve one or more `Promises` previously created.
 
-The `filter` argument has to be a `function`. It should return a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) to resolve the matching `Promise`, and a falsy value otherwise.
+The `filter` argument has to be a `function` or `RegExp`. In case of a `function` it should return a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) to resolve the matching `Promise`, and a falsy value otherwise.
 
 ```js
 function (el) { return el.context === 'foo' }
+```
+
+In case of a `RegExp`, the `.test()` method will be called against the context, passed in while creation.
+```js
+const promise = store.create('foo')
+store.resolve(/foo/,'bar')
+await promise // Returns 'bar'
 ```
 
 The `value` argument can be of `any` type and will be the promise result.
