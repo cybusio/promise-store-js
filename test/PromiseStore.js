@@ -20,59 +20,76 @@ describe('Class PromiseStore - Unit Tests', () => {
     })
 
     it('should handle promise timeout', () => {
-        const sore = new PromiseStore({ timeout: 1 })
-        return expect(sore.create('foo')).to.be.rejectedWith('request timeout')
+        const store = new PromiseStore({ timeout: 1 })
+        return expect(store.create('foo')).to.be.rejectedWith('request timeout')
     })
 
     it('should store created promises', () => {
-        const sore = new PromiseStore()
-        expect(sore.size).to.equal(0)
+        const store = new PromiseStore()
+        expect(store.size).to.equal(0)
 
-        const promise = sore.create('foo')
+        const promise = store.create('foo')
 
-        expect(sore.size).to.equal(1)
-        expect(sore._store[0].context).to.equal('foo')
+        expect(store.size).to.equal(1)
+        expect(store._store[0].context).to.equal('foo')
     })
 
-    it('should resolve promises and delete it from the sore', (done) => {
-        const sore = new PromiseStore()
-        expect(sore.size).to.equal(0)
+    it('should resolve promises and delete it from the store using filter function', (done) => {
+        const store = new PromiseStore()
+        expect(store.size).to.equal(0)
 
-        sore.create('foo')
+        store.create('foo')
             .then(res => {
                 expect(res).to.equal('bar')
-                expect(sore.size).to.equal(0)
+                expect(store.size).to.equal(0)
                 done()
             })
             .catch(err => {
                 done(err)
             })
 
-        sore.resolve(function (el) { return el.context === 'foo' }, 'bar')
+        store.resolve(function (el) { return el.context === 'foo' }, 'bar')
+    })
+
+    it('should resolve promises and delete it from the store using regular expression', (done) => {
+        const store = new PromiseStore()
+        expect(store.size).to.equal(0)
+
+        store.create('foo')
+            .then(res => {
+                expect(res).to.equal('bar')
+                expect(store.size).to.equal(0)
+                done()
+            })
+            .catch(err => {
+                done(err)
+            })
+
+        store.resolve(/foo/, 'bar')
     })
 
     it('should delete promise on timeout', async () => {
-        const sore = new PromiseStore({ timeout: 0 })
-        expect(sore.size).to.equal(0)
+        const store = new PromiseStore({ timeout: 0 })
+        expect(store.size).to.equal(0)
 
         try {
-            await sore.create('foo')
+            await store.create('foo')
         } catch (err) { }
 
-        expect(sore.size).to.equal(0)
+        expect(store.size).to.equal(0)
     })
 
     it('should throw on invalid filter function', async () => {
-        const sore = new PromiseStore()
+        const store = new PromiseStore()
 
         expect(() => {
-            sore.resolve('foo')
-        }).to.throw(Error, /filter is not a function/)
+            store.resolve(0)
+        }).to.throw(Error, /Unexpected filter type/)
 
         expect(() => {
-            sore.resolve(() => { })
-        }).to.throw(Error, /arrow function not supported as filter/)
+            store.resolve({ foo: 'bar' })
+        }).to.throw(Error, /Unexpected filter type/)
 
-        sore.create('foo')
+        store.create('foo')
     })
 })

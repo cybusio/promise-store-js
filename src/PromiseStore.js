@@ -25,10 +25,19 @@ class PromiseStore {
     }
 
     resolve(filter, value) {
-        if (typeof filter !== 'function') throw new Error(`filter is not a function`)
-        if (!filter.toString().startsWith('function ')) throw new Error(`arrow function not supported as filter`)
-        const _filter = filter.bind({})
-        const promises = this._store.filter(_filter)
+        let promises = null
+
+        switch (typeof filter) {
+            case 'function': promises = this._store.filter(filter); break;
+            case 'string':
+            case 'object':
+                if (!(filter instanceof RegExp)) throw new Error('Unexpected filter type')
+                const re = new RegExp(filter)
+                promises = this._store.filter(el => { return re.test(el.context) })
+                break;
+            default: throw new Error('Unexpected filter type')
+        }
+
         promises.forEach((el) => {
             clearTimeout(el.timeout)
             el.resolve(value)
